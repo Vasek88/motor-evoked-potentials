@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CEDResources>
+	<Sample>
+		<!--Sampling configuration saved to C:\Users\CEDACQ\Desktop\CED_scripts\Signal\SICI\SICIkonfig.sgcx on 5. øíjen 2018 14:33:22-->
+		<SampCtl t="88" b="0" l="-2" r="2"/>
+		<PulseDlg t="150" b="549" l="88" r="736"/>
+		<General SampType="3" NumPorts="2" MaxPort="128" ADCRange="5" States="1" VaryPoints="0" IdealRate="5000" ActualRate="5000" Points="5000" XZeroOffs="0" Burst="1" Write="1" Pause="0" Trigger="1" KeyMark="0" DigMark="1" InvTrig="0" XConvert="0" XCUnits="Pts" XCPerUnit="1">
+			<Ports>
+				<p id="0" n="3"/>
+				<p id="1" n="2"/>
+			</Ports>
+		</General>
+		<Ports ArtMode="0" ArtStart="0" ArtEnd="0.10000000000000001" ArtLimit="100" ArtPercent="0"/>
+		<Peri PeriType="0" PeriPoints="100" PeriDigIn="8" PeriDigHi="0" PeriAnaHi="1" PeriAnaLo="0" PeriAnaHyst="0.10000000149011612"/>
+		<Outputs OutType="1" SeqPeriod="1" AbsLev="0" AbsTime="1" MaxWave="0" SeqReset="1" SeqWaveRate="1000" SeqDACMask="1" SeqWave="0" SeqAreas="1" SeqJump="0">
+			<DACs Count="8" Mask="0">
+				<d id="0" Scale="0.000152587890625" Offset="0" Units="V"/>
+				<d id="1" Scale="0.000152587890625" Offset="0" Units="V"/>
+				<d id="2" Scale="0.000152587890625" Offset="0" Units="V"/>
+				<d id="3" Scale="0.000152587890625" Offset="0" Units="V"/>
+				<d id="4" Scale="0.000152587890625" Offset="0" Units="V"/>
+				<d id="5" Scale="0.000152587890625" Offset="0" Units="V"/>
+				<d id="6" Scale="0.000152587890625" Offset="0" Units="V"/>
+				<d id="7" Scale="0.000152587890625" Offset="0" Units="V"/>
+			</DACs>
+		</Outputs>
+		<States StaType="2" StaNum="2" DigIMask="255" DigOMask="1" StaRepeats="15" StaOrder="1" StaIdleEnd="0"/>
+		<Auto AutoName="1930Blok1v14_30" AutoSave="1" AutoPath="C:\Users\CEDACQ\Desktop\DATA\SICI\1930_Nr" LimFrames="1" MaxFrames="30" LimSize="0" MaxSize="0" LimTime="0" MaxTime="0"/>
+		<Pulses IReps="0" WrOnCyc="1" CycAtSt="1" States="3">
+			<State id="0" Dig="0" Repeats="1" DAC0="0" DAC1="0" DAC2="0" DAC3="0" DAC4="0" DAC5="0" DAC6="0" DAC7="0" Sequence="" Label="">
+				<PulseList id="0">
+					<Pulse id="0" Type="0" Name="" Before="0" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="1" Interval="5" IVary="0" Points="0"/>
+					<Pulse id="1" Type="1" Name="" Before="0.043999999761581421" Length="0.0099999997764825821" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0020000000949949026" Dig="255"/>
+					<Pulse id="2" Type="7" Name="" Before="0.42599999904632568" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0099999997764825821" Dig="255" NumPul="4" Gap="0.10000000149011612"/>
+				</PulseList>
+				<PulseList id="1">
+					<Pulse id="0" Type="0" Name="" Before="0" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+					<Pulse id="1" Type="5" Name="" Before="1.0299999713897705" Length="0.6600000262260437" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0099999997764825821" Phase="90" Centre="0" Period="0.10000000149011612"/>
+				</PulseList>
+				<PulseList id="2">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="3">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="4">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="5">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="6">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="7">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="8">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="9">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+			</State>
+			<State id="1" Dig="0" Repeats="1" DAC0="0" DAC1="0" DAC2="0" DAC3="0" DAC4="0" DAC5="0" DAC6="0" DAC7="0" Sequence="" Label="dp">
+				<PulseList id="0">
+					<Pulse id="0" Type="0" Name="" Before="0" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="1" Interval="5" IVary="0" Points="0"/>
+					<Pulse id="1" Type="1" Name="" Before="0.043999999761581421" Length="0.0099999997764825821" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0020000000949949026" Dig="255"/>
+					<Pulse id="2" Type="7" Name="" Before="0.42599999904632568" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0099999997764825821" Dig="255" NumPul="4" Gap="0.10000000149011612"/>
+					<Pulse id="3" Type="1" Name="" Before="0.080000013113021851" Length="0.0099999997764825821" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="1" Dig="255"/>
+				</PulseList>
+				<PulseList id="1">
+					<Pulse id="0" Type="0" Name="" Before="0" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+					<Pulse id="1" Type="5" Name="" Before="1.0299999713897705" Length="0.6600000262260437" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0099999997764825821" Phase="90" Centre="0" Period="0.10000000149011612"/>
+				</PulseList>
+				<PulseList id="2">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="3">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="4">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="5">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="6">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="7">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="8">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+					<Pulse id="1" Type="1" Name="" Before="0.50999999046325684" Length="0.0099999997764825821" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="1" Dig="1"/>
+				</PulseList>
+				<PulseList id="9">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+			</State>
+			<State id="2" Dig="0" Repeats="1" DAC0="0" DAC1="0" DAC2="0" DAC3="0" DAC4="0" DAC5="0" DAC6="0" DAC7="0" Sequence="" Label="sp">
+				<PulseList id="0">
+					<Pulse id="0" Type="0" Name="" Before="0" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="1" Interval="5" IVary="0" Points="500"/>
+					<Pulse id="1" Type="1" Name="" Before="0.043999999761581421" Length="0.0099999997764825821" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0020000000949949026" Dig="255"/>
+					<Pulse id="2" Type="7" Name="" Before="0.42599999904632568" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0099999997764825821" Dig="255" NumPul="4" Gap="0.10000000149011612"/>
+					<Pulse id="3" Type="1" Name="" Before="0.079999998211860657" Length="0.0099999997764825821" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="1" Dig="255"/>
+				</PulseList>
+				<PulseList id="1">
+					<Pulse id="0" Type="0" Name="" Before="0" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+					<Pulse id="1" Type="5" Name="" Before="1.0299999713897705" Length="0.6600000262260437" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0.0099999997764825821" Phase="90" Centre="0" Period="0.10000000149011612"/>
+				</PulseList>
+				<PulseList id="2">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="3">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="4">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="5">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="6">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="7">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+				<PulseList id="8">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+					<Pulse id="1" Type="1" Name="" Before="0.50999999046325684" Length="0.0099999997764825821" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="1" Dig="1"/>
+				</PulseList>
+				<PulseList id="9">
+					<Pulse id="0" Type="0" Name="" Before="0.20000000298023224" Length="0.10000000149011612" Repeats="1" Deltas="0" Flags="0" Delta="0" Amp="0" Dig="0" Trig="0" Frame="2" Interval="10" IVary="0" Points="0"/>
+				</PulseList>
+			</State>
+		</Pulses>
+		<CondPorts Count="8">
+			<c id="0" Scale="0.000152587890625" Offset="0" Units="mV" Gain="1000" Offs="0" Mode="3" Source="4" LFilt="2000" HFilt="5" LFSet="2" HFSet="2"/>
+			<c id="1" Scale="0.000152587890625" Offset="0" Units="mV" Gain="1000" Offs="0" Mode="3" Source="4" LFilt="2000" HFilt="5" LFSet="2" HFSet="2"/>
+			<c id="2" Scale="0.000152587890625" Offset="0" Units="mV" Gain="1000" Offs="0" Mode="3" Source="5" LFilt="2000" HFilt="5" LFSet="2" HFSet="2"/>
+			<c id="3" Scale="0.000152587890625" Offset="0" Units="mV" Gain="1000" Offs="0" Mode="3" Source="5" LFilt="2000" HFilt="5" LFSet="2" HFSet="2"/>
+			<c id="4" Scale="0.000152587890625" Offset="0" Units="mV" Gain="1000" Offs="0" Mode="3" Source="4" LFilt="2000" HFilt="5" LFSet="2" HFSet="2"/>
+			<c id="5" Scale="0.000152587890625" Offset="0" Units="mV" Gain="1000" Offs="0" Mode="3" Source="4" LFilt="2000" HFilt="5" LFSet="2" HFSet="2"/>
+			<c id="6" Scale="0.000152587890625" Offset="0" Units="mV" Gain="1000" Offs="0" Mode="3" Source="4" LFilt="2000" HFilt="5" LFSet="2" HFSet="2"/>
+			<c id="7" Scale="0.000152587890625" Offset="0" Units="mV" Gain="1000" Offs="0" Mode="3" Source="4" LFilt="2000" HFilt="5" LFSet="2" HFSet="2"/>
+		</CondPorts>
+		<ExtraPorts Count="2">
+			<p id="2" Name="ADM" Opts=""/>
+			<p id="3" Name="APB" Opts=""/>
+		</ExtraPorts>
+		<AuxTel/>
+		<AuxState>
+			<MagStim Version="1" Dev="1" Port="5" Port2="2" Flags="130" Unlk="" Trig="-1" OverrideChecks="0" MaxSt="2">
+				<s id="0" PwrA="30" PwrB="30" Int="50" Freq="10" NPul="2" Flags="1"/>
+				<s id="1" PwrA="1" PwrB="1" Int="3" Freq="10" NPul="2" Flags="0"/>
+				<s id="2" PwrA="1" PwrB="0" Int="0" Freq="10" NPul="2" Flags="0"/>
+			</MagStim>
+		</AuxState>
+		<ForceOP SetDAC0="0" DAC0="0" SetDAC1="0" DAC1="0" SetDAC2="0" DAC2="0" SetDAC3="0" DAC3="0" SetDAC4="0" DAC4="0" SetDAC5="0" DAC5="0" SetDAC6="0" DAC6="0" SetDAC7="0" DAC7="0" DigOut="0" DigLow="0" RampT="0" OnLoad="0" OnStart="0" OnFinish="0"/>
+		<Clamp State="0" Count="8">
+			<c id="0" Type="-1" Stim="0" Resp="0" DAC="0"/>
+			<c id="1" Type="-1" Stim="0" Resp="0" DAC="0"/>
+			<c id="2" Type="-1" Stim="0" Resp="0" DAC="0"/>
+			<c id="3" Type="-1" Stim="0" Resp="0" DAC="0"/>
+			<c id="4" Type="-1" Stim="0" Resp="0" DAC="0"/>
+			<c id="5" Type="-1" Stim="0" Resp="0" DAC="0"/>
+			<c id="6" Type="-1" Stim="0" Resp="0" DAC="0"/>
+			<c id="7" Type="-1" Stim="0" Resp="0" DAC="0"/>
+		</Clamp>
+		<DynClamp DCFlags="0"/>
+	</Sample>
+	<DocCfs>
+		<View>
+			<WPlace flags="0" showc="1" minx="-1" miny="-1" maxx="-9" maxy="-36" t="0" b="962" l="0" r="958"/>
+			<Font hgt="-13" wid="0" esc="0" or="0" wgt="400" itl="0" und="0" so="0" cset="0" oupre="0" clpre="0" qual="0" paf="16" fnam="Times New Roman"/>
+			<Chan Chan="0" DMode="2" DDSize="0" DWidth="1" DOffset="0" DError="1" DFlags="0" Vis="1" Ax="1" AxMin="-1.4282303739217681" AxMax="1.3878087595654918" AdcAxMin="-1.4282303739217681" AdcAxMax="1.3878087595654918" RateAxMin="0" RateAxMax="10" AxType="1" ChType="0" DefDMode="2"/>
+			<Chan Chan="1" DMode="2" DDSize="-1" DWidth="1" DOffset="0" DError="1" DFlags="0" Vis="1" Ax="1" AxMin="-1.3597190597484445" AxMax="1.3727932814767951" AdcAxMin="-1.3597190597484445" AdcAxMax="1.3727932814767951" RateAxMin="0" RateAxMax="10" AxType="1" ChType="0" DefDMode="2"/>
+			<Chan Chan="2" DMode="11" DDSize="0" DWidth="1" DOffset="0" DError="1" DFlags="0" Vis="0" Ax="0" AxMin="0" AxMax="10" AdcAxMin="0" AdcAxMax="1" RateAxMin="0" RateAxMax="10" AxType="1" ChType="1" DefDMode="11"/>
+			<XInfo Left="0" Right="0.099999997473787516" YGrid="1" OverCol="7" CurFr="0" OverDraw="1" DCStart="XLow()" DCEnd="XHigh()" ChanNos="2" XAxSmall="5" VCLabMode="3" HCLabMode="3" VCCount="1">
+				<VCur id="0" Pos="0" LabMode="3" LabPos="0.20000000000000001" Num="0" Chan="0" Mode="0" LabStr=""/>
+			</XInfo>
+			<ChOrder Chans="3">
+				<c id="0" Chan="0"/>
+				<c id="1" Chan="1"/>
+				<c id="2" Chan="2"/>
+			</ChOrder>
+			<CursVals XZero="0" YZero="0" Mode="0" Chan="0"/>
+			<CursRegs XZero="0" YZero="0" Mode="0" Chan="0"/>
+			<OvDraw3d XProp="0.10000000000000001" XScale="1" YScale="0.5" MaxF="15"/>
+			<OvDrawFr FSCod="-4" FSSta="1" FSStr=""/>
+		</View>
+		<View>
+			<WPlace flags="0" showc="1" minx="-1" miny="-1" maxx="-9" maxy="-36" t="0" b="962" l="958" r="1916"/>
+			<Font hgt="-13" wid="0" esc="0" or="0" wgt="400" itl="0" und="0" so="0" cset="0" oupre="0" clpre="0" qual="0" paf="16" fnam="Times New Roman"/>
+			<Chan Chan="0" DMode="2" DDSize="0" DWidth="1" DOffset="0" DError="1" DFlags="0" Vis="1" Ax="1" AxMin="-1.3656094084060741" AxMax="1.319429380102487" AdcAxMin="-1.3656094084060741" AdcAxMax="1.319429380102487" RateAxMin="0" RateAxMax="10" AxType="1" ChType="0" DefDMode="2"/>
+			<Chan Chan="1" DMode="2" DDSize="-1" DWidth="1" DOffset="0" DError="1" DFlags="0" Vis="1" Ax="1" AxMin="-1.3563437343993276" AxMax="1.3693855010762441" AdcAxMin="-1.3563437343993276" AdcAxMax="1.3693855010762441" RateAxMin="0" RateAxMax="10" AxType="1" ChType="0" DefDMode="2"/>
+			<Chan Chan="2" DMode="11" DDSize="0" DWidth="1" DOffset="0" DError="1" DFlags="0" Vis="0" Ax="0" AxMin="0" AxMax="10" AdcAxMin="0" AdcAxMax="1" RateAxMin="0" RateAxMax="10" AxType="1" ChType="1" DefDMode="11"/>
+			<XInfo Left="0" Right="0.099999997473787516" YGrid="1" OverCol="7" CurFr="0" OverDraw="1" DCStart="XLow()" DCEnd="XHigh()" ChanNos="2" XAxSmall="5" VCLabMode="3" HCLabMode="3" VCCount="1">
+				<VCur id="0" Pos="0" LabMode="3" LabPos="0.20000000000000001" Num="0" Chan="0" Mode="0" LabStr=""/>
+			</XInfo>
+			<ChOrder Chans="3">
+				<c id="0" Chan="0"/>
+				<c id="1" Chan="1"/>
+				<c id="2" Chan="2"/>
+			</ChOrder>
+			<CursVals XZero="0" YZero="0" Mode="0" Chan="0"/>
+			<CursRegs XZero="0" YZero="0" Mode="0" Chan="0"/>
+			<OvDraw3d XProp="0.10000000000000001" XScale="1" YScale="0.5" MaxF="15"/>
+			<OvDrawFr FSCod="-4" FSSta="2" FSStr=""/>
+		</View>
+	</DocCfs>
+	<App>
+		<WPlace flags="2" showc="3" minx="-1" miny="-1" maxx="-1" maxy="-1" t="90" b="937" l="90" r="1854"/>
+	</App>
+</CEDResources>

@@ -1,0 +1,263 @@
+'----------KONFIGURACE BISTIMU----------------------
+
+'Nastaveni portu pro komunikaci (COM 5)
+SampleAuxStateParam(3, 5);
+'Pocet stavu stimulatoru = 2 (Stav_1: CS -> TS; Stav_2: TS)
+SampleStates(2);
+'Automaticke cyklovani (Stav_1 <-> Stav_2) ihned po spusteni mereni (1), zapis dat na disk (2)
+SampleStatesOptions(3);
+'Mod rizeni stimulatoru (0 = external digit; 1 = static output; 2 = dynamic output)
+SampleStatesMode(2);
+'Typ stimulatoru (-1 = not; 0 = 200; 1 = Bistim; 2 = Rapid; 3 = dual 200)
+SampleAuxStateParam(1, 1);
+'Nastaveni high-resolution timing modu (ISI lze nastavit od 1 do 99.9 po 0.1 ms), hodnota 2
+'Povolit spusteni bez pritomnosti BISTIMU, hodnota 128 (suma = 130)
+SampleAuxStateParam(2, 130);
+
+
+'----------SHORT INTRACORTICAL INHIBITION----------
+
+'Ukonceni predchoziho mereni bez ulozeni
+SampleAbort();
+'Vymazani aktualni konfigurace
+SampleClear();
+'Vypsani informaci o mereni
+Message("Popis ulohy|Mereni SHORT INTRACORTICAL INHIBITION (SICI) \n\nBLOKY STIMULACE: \n - BLOK 1 => 15x (0,9AMT -> 1.3RMT); 15x (1,3RMT) \n - BLOK 2 => 15x (0,8AMT -> 1.3RMT); 15x (1,3RMT) \n - BLOK 3 => 15x (0,7AMT -> 1.3RMT); 15x (1,3RMT)");
+
+'----------NACTENI KONFIGURACNIHO SOUBORU----------
+var flag%; 'indikator vysledku operace (< 0 -> error)
+var name$; 'jmeno konfiguracniho souboru
+
+name$ := "SICIkonfig.sgcx";
+
+flag% := FilePathSet("C:\\Users\\CEDACQ\\Desktop\\CED_scripts\\Signal\\SICI");
+if (flag% < 0) then
+    Message ("Nelze nalezt uvedenou cestu!");
+else
+    flag% := FileOpen(name$, 6);
+    if(flag% < 0) then
+        Message ("Nelze nalezt konfiguracni soubor! Vyberte ho rucne.");
+        name$ := "";
+        FileOpen(name$, 6);
+    endif
+    
+endif
+
+'----------ZADANI IDENTIFIKACNICH UDAJU-------------------------------------
+
+var pName$; 'pacientovo prijmeni
+var pYear%; 'pacientuv rok narozeni
+var pType%; 'Norma/On/Off
+var typeList$, typeListShort$[3];
+var dataFolder$; 'cesta ke slozce pro ulozeni dat
+
+typeList$ := "Norma|Stav ON|Stav OFF";
+typeListShort$[0] := "_Nr";
+typeListShort$[1] := "_On";
+typeListShort$[2] := "_Off";
+
+'Vytvoreni dialogoveho okna pro zadani hodnot
+DlgCreate("Zadejte pacientovo prijmeni, rok narozeni, Norma/On/Off", 0, 0, 60, 5);
+DlgString(1, "Prijmeni", 10);
+DlgInteger(2, "Rok narozeni", 1930, 2000);
+DlgList(3, "Zvolte", typeList$);
+DlgShow(pName$, pYear%, pType%);
+
+'poradi jednotlivych bloku - RANDOMIZACE
+var b1%, b2%, b3%;
+DlgCreate("Zvolte poradi bloku");
+DlgText("Napriklad:\nPrvni: 2\nDruhy: 3\nTreti: 1", 1, 1);
+DlgInteger(1, "Prvni: ", 1, 3, 10, 4);
+DlgInteger(2, "Druhy: ", 1, 3, 10, 5);
+DlgInteger(3, "Treti: ", 1, 3, 10, 6);
+DlgShow(b1%, b2%, b3%);
+var CSList[3], blokList[3];
+blokList[0] := b1%; blokList[1] := b2%; blokList[2] := b3%; 
+CSList[0] := 0.9; CSList[1] := 0.8; CSList[2] := 0.7;
+
+'Test, zda doslo k vytvoreni slozky
+dataFolder$ := "C:\\Users\\CEDACQ\\Desktop\\DATA\\SICI\\" + pName$ + Str$(pYear%) + typeListShort$[pType%];
+flag% := FilePathSet(dataFolder$, 0, 1);
+if (flag% < 0) then
+    Message("!!! VAROVANI !!!|Slozka pro ukladani dat NEBYLA vytvorena!!!");
+endif
+
+'----------NASTAVENI SLOZKY PRO UKLADANI DAT------------------------
+flag% := FilePathSet(dataFolder$, 3, 0);
+if (flag% < 0) then
+    Message("!!! VAROVANI !!!|Slozka pro ukladani dat NEBYLA nalezena!!!");
+endif
+
+'----------ZADANI HODNOT RMT, AMT------------------
+
+var RMT%; 'resting motor treshold
+var AMT%; 'active motor treshold
+
+'Vytvoreni dialogoveho okna pro zadani hodnot
+DlgCreate("Zadejte hodnoty RMT a AMT (%)", 0, 0, 50, 5);
+DlgInteger(1, "Hodnota RMT (%)", 1, 100);
+DlgInteger(2, "Hodnota AMT (%)", 1, 100);
+DlgShow (RMT%, AMT%);
+
+'----------KONFIGURACE BISTIMU----------------------
+
+'Pocet stavu stimulatoru = 2 (Stav_1: CS -> TS; Stav_2: TS)
+SampleStates(2);
+'Automaticke cyklovani (Stav_1 <-> Stav_2) ihned po spusteni mereni (1), zapis dat na disk (2)
+SampleStatesOptions(3);
+'Mod rizeni stimulatoru (0 = external digit; 1 = static output; 2 = dynamic output)
+SampleStatesMode(2);
+'Typ stimulatoru (-1 = not; 0 = 200; 1 = Bistim; 2 = Rapid; 3 = dual 200)
+SampleAuxStateParam(1, 1);
+'Nastaveni high-resolution timing modu (ISI lze nastavit od 1 do 99.9 po 0.1 ms), hodnota 2
+'Povolit spusteni bez pritomnosti BISTIMU, hodnota 128 (suma = 130)
+SampleAuxStateParam(2, 130);
+'Nastaveni portu pro komunikaci (COM 5)
+SampleAuxStateParam(3, 5);
+
+'----------BLOK 1-----------------------------------
+'Stav_1: CS = 0.9 x AMT; TS = 1.3 x RMT; ISI = 2.5 ms; |Stav_1 - Stav_2| = 5 s
+'Stav_2: TS = 1.3 x RMT
+var nextOperation%;
+
+var Cs1s1b%; '1s -> Stav_1; 1b -> blok 1
+var Ts1s1b%;
+var Ts2s1b%; '2s -> Stav_2; 1b -> blok 1
+
+'Vypocet intenzit (%) pro blok 1
+Cs1s1b% := Round(CSList[blokList[0]-1] * AMT%);
+Ts1s1b% := Round(1.3 * RMT%);
+Ts2s1b% := Round(1.3 * RMT%);
+
+'Provedeni bloku 1
+nextOperation% := 1;
+while nextOperation% = 1 do
+    nextOperation% := blok%(pName$, pYear%, "Blok" + Str$(blokList[0]), Cs1s1b%, Ts1s1b%, Ts2s1b%);
+wend;
+
+'----------BLOK 2-----------------------------------
+'Stav_1: CS = 0.8 x AMT; TS = 1,3 x RMT; ISI = 2.5 ms; |Stav_1 - Stav_2| = 5 s
+'Stav_2: TS = 1.3 x RMT
+
+var Cs1s2b%; '1s -> Stav_1; 2b -> blok 2
+var Ts1s2b%;
+var Ts2s2b%; '2s -> Stav_2; 2b -> blok 2
+
+'Vypocet intenzit (%) pro blok 2
+Cs1s2b% := Round(CSList[blokList[1]-1] * AMT%);
+Ts1s2b% := Round(1.3 * RMT%);
+Ts2s2b% := Round(1.3 * RMT%);
+
+'Provedeni bloku 2 (nextOperation = 2 -> dalsi blok)
+if nextOperation% = 2 then
+    nextOperation% := 1;    'nextOperation = 1 -> opakovat
+    while nextOperation% = 1 do
+        nextOperation% := blok%(pName$, pYear%, "Blok" + Str$(blokList[1]), Cs1s2b%, Ts1s2b%, Ts2s2b%);
+    wend;
+endif
+
+'----------BLOK 3-----------------------------------
+'Stav_1: CS = 0.7 x AMT; TS = 1,3 x RMT; ISI = 2.5 ms; |Stav_1 - Stav_2| = 5 s
+'Stav_2: TS = 1.3 x RMT
+
+var Cs1s3b%; '1s -> Stav_1; 3b -> blok 3
+var Ts1s3b%;
+var Ts2s3b%; '2s -> Stav_2; 3b -> blok 3
+
+'Vypocet intenzit (%) pro blok 3
+Cs1s3b% := Round(CSList[blokList[2]-1] * AMT%);
+Ts1s3b% := Round(1.3 * RMT%);
+Ts2s3b% := Round(1.3 * RMT%);
+
+'Provedeni bloku 3 (nextOperation = 2 -> dalsi blok)
+if nextOperation% = 2 then
+    nextOperation% := 1;    'nextOperation = 1 -> opakovat
+    while nextOperation% = 1 do
+        nextOperation% := blok%(pName$, pYear%, "Blok" + Str$(blokList[2]), Cs1s3b%, Ts1s3b%, Ts2s3b%);
+    wend    
+endif
+
+func blok%(pName$, pYear%, bName$, Cs1%, Ts1%, Ts2%)
+
+    '----------OTEVRENI NOVEHO SOUBORU-----------------
+    'Sestaveni nazvu souboru
+    var cas$ := Time$(1, 3, 0, "_");
+    SampleAutoName$(pName$ + Str$(pYear%) +bName$ + "v" + cas$);
+
+    '0 = novy datovy soubor; 2 = format zobrazeni dle konfig. souboru
+    FileNew(0, 2);          
+
+    var list%[10],i%;
+    ViewList(list%[], 1);       
+    for i%:=1 to list%[0] do
+    'Urceni pozic oken a jejich viditelnost    
+        view(list%[i%]).WindowVisible(1);
+        view(list%[i%]).WindowTitle$(pName$ + Str$(pYear%) +bName$);
+        if i% = 1 then
+            view(list%[i%]).Window(0, 0, 50, 100);
+            view(list%[i%]).XRange(0.5, 0.6);
+        else
+            view(list%[i%]).Window(50, 0, 100, 100);
+            view(list%[i%]).XRange(0.5, 0.6);
+        endif
+    next;
+
+    var isiTime;
+    isiTime := 3;  'ZMENENO NA 3 ms!!!!!!!!!!!!!!!!!!!!!
+
+    'Nastaveni intenzit stimulace pro aktualni blok (odeslani dat do BISTIMU)
+    SampleAuxStateValue(0, 0, 1);       '(0 = Stav_0; 0 = state flag; 1 = manual control)
+
+    SampleAuxStateValue(1, 1, Cs1%);    '(1 = Stav_1; 1 = power level; Cs1% = intenzita stimulace)
+    SampleAuxStateValue(1, 2, Ts1%);    '(1 = Stav_1; 2 = secondary power level; Ts1% = intenzita stimulace)
+    SampleAuxStateValue(1, 3, isiTime);     '(1 = Stav_1; 3 = ISI; 2.5 ms)
+
+    SampleAuxStateValue(2, 1, Ts2%);    '(2 = Stav_2; 1 = power level; Ts2% = intenzita stimulace)
+    SampleAuxStateValue(2, 2, 0);       '(2 = Stav_2; 2 = secondary power level; 0 = intenzita)
+    SampleAuxStateValue(2, 3, 0);       '(2 = Stav_2; 3 = ISI; 0 ms)
+
+    'Cekani na ukonceni mereni
+    while (SampleStatus() <> -1) do
+        Yield(0, 512);
+        'Zobrazeni cisla framu
+        WindowTitle$(pName$ + Str$(pYear%) +bName$ + " " + Str$(FrameCount()) + "/30");
+        if (SampleStatus() = 4 and FrameCount() = 30) then
+            SampleStop();
+        endif
+    wend
+
+    'Informace o ukonceni prvniho bloku
+    Sound(2000, 0.6);
+    Speak("Block finished!");
+
+    'Pockat 1 sekundu
+    Yield(1, 512);
+
+    'Otazka, zda pokracovat, opakovat, konec
+    var qResult%;
+    DlgCreate("Zvolte nasledujici operaci");
+    DlgButton(0, "KONEC!");
+    DlgButton(1, "Opakovat blok");
+    'if(bName$ <> "Blok3") then
+        DlgButton(2, "Dalsi blok");
+    'endif
+    DlgShow();
+    qResult% := DlgButton();
+
+    'Postupne zavreni oken s namerenymi daty
+    for i%:=1 to list%[0] do  
+        view(list%[i%]);
+        FileClose(0);
+    next;
+    
+    docase
+        case qResult% = 0 then  'Konec
+            return 0;
+        case qResult% = 1 then  'Opakovat blok
+            return 1;
+        case qResult% = 2 then  'Dalsi blok
+            return 2;
+    endcase
+
+end
+

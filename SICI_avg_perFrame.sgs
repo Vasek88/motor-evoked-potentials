@@ -1,0 +1,451 @@
+'----------MERENI PRUMERNYCH AMPLITUD MEP - SICI----------
+
+'nastaveni slozky, ktera se nabidne pri otvirani datoveho souboru
+FilePathSet("C:\\Users\\CEDACQ\\Desktop\\DATA\\SICI");
+
+'Vytvoreni dialogoveho okna pro vyber mereni
+var dataType%, isiType%;
+var typeList$;
+var isiList$;
+typeList$ := "APB|ADM";
+isiList$ := "2.5ms|3.0ms";   'netreba resit, odecita se az pri analyze!!!
+
+DlgCreate("Vyberte sval", 0, 0, 60, 5);
+DlgList(1, "Zvolte sval", typeList$);
+'DlgList(2, "Zvolte ISI(ms)", isiList$);
+DlgShow(dataType%); 'isiType%
+
+'deklarace promennych
+var state%;
+var ApxBl, ApxT1x, ApxT1y, ApxT2x, ApxT2y, ApxT3x, ApxT3y, p2p;
+var frameLength;
+var data[32][11];     '32 radky (sp, dp), 9 sloupcu (frm,sp/dp, bl, T1x, T1y, T2x, T2y, T3x, T3y, p2p, flagDivnosti)
+data[0][1] := 1; data[1][1] := 2;
+var offset;
+
+var backCounter%;   'pocitadlo, o kolik MEPu se lze posunout zpet/dopredu
+backCounter% := 0;
+
+var numberFrame%, stateFrame%;
+var dataFlag%;  'indikator, ze uz se tagujou data
+var spdpFlag%;  'indikator, zda uz se muzou zacit tagovat jednotlive Framy
+
+var changeFlag%;    'indikator zmeny hodnoty
+var flagDivnosti%;  'indikator, zda je vybaveny MEP
+flagDivnosti% := 1; '1 -> MEP OK, 0 -> zadny MEP
+
+'seznamy otevrenych oken dle jejich typu
+var memoList%[10];
+var textList%[10];
+var dataList%[10];
+
+'otevreni souboru s namerenymi daty
+var name$;
+var v11%;
+v11% := FileOpen("", 0);
+name$ := FileName$(3);
+ViewList(dataList%[], 1);
+
+'cyklus pro zpracovani sp, dp
+var flag%;  
+flag% := 1;
+state% := 2; '2 = single p.
+makeAverage%(state%);
+closeWindows%(0);
+makeAverage%(state%);
+
+var firstLoop%;
+firstLoop% := 1;
+
+'------------------------------------------------------------
+while flag% = 1 do
+      
+    flag% := ToolbarSet(1, "KONEC!", endFrame%);
+    flag% := ToolbarSet(2, "Predchozi frame(<-)", backFrame%);
+    flag% := ToolbarSet(3, "Dalsi frame(->2)", nextFrame%);
+    flag% := ToolbarSet(4, "PER frame", perFrame%);
+    flag% := ToolbarSet(5, "Zapsat hodnotu(1->)", writeValues%);
+    flag% := ToolbarSet(6, "AVGsp->AVGdp->", spdpFrame%);
+    flag% := ToolbarSet(7, "Zadny MEP(-)", zadny%);
+    
+    if firstLoop% > 0 then
+        'zakazani tlacitek perFrame, dalsi frame, predchozi frame
+        ToolbarEnable(2, 0);
+        ToolbarEnable(3, 0);
+        ToolbarEnable(4, 0);
+        ToolbarEnable(7, 0);
+        firstLoop% := 0;
+    endif
+    ToolbarVisible(1);
+    Toolbar("Mereni prumernych MEP", 1023);
+   
+    
+wend
+'------------------------------------------------------------
+'bigDataPrint%();
+
+func zadny%()
+
+    flagDivnosti% := 0;
+    ToolbarEnable(7, 0);    'vypne "zadny MEP"
+    return 1
+end
+
+func perFrame%()
+
+    'pocitadlo, o kolik MEPu se lze vratit zpet
+    backCounter% := 0;
+    dataFlag% := 1;
+    'zavrit okna s prumernymi hodnotami
+    closeWindows%(0);
+    'zakazat tagovani prumernych MEPu, perFrame, predchozi frame
+    ToolbarEnable(6, 0);
+    ToolbarEnable(4, 0);
+    ToolbarEnable(2, 0);
+    'povolit dalsi frame, zadny frame
+    ToolbarEnable(7, 1);
+    ToolbarEnable(3, 1);
+
+    'nacteni formatovaciho souboru
+    docase
+    case dataType% = 0 then  'APB
+        FileApplyResource("C:\\Users\\CEDACQ\\Desktop\\CED_scripts\\Signal\\Mereni hodnot\\SICI_APB_T1.sgrx");
+    case dataType% = 1 then  'ADM
+        FileApplyResource("C:\\Users\\CEDACQ\\Desktop\\CED_scripts\\Signal\\Mereni hodnot\\SICI_ADM_T1.sgrx");
+    endcase
+   'zviditelneni okna s daty, uprava velikosti okna, optimalizace osy y
+    WindowVisible(1);
+    window(0, 0, 50, 95);
+    'nastaveni pozice kurzoru
+    Cursor(1, 0.01+offset); Cursor(4, 0.02+offset); Cursor(5, 0.06+offset);
+    XRange(0+offset, 0.1+offset);
+    'nastaveni framu cislo 1
+    View(dataList%[1]).Frame(2);
+    View(dataList%[1]).Frame(1);
+    yOptim%();
+
+    'vypise dosud otagovane intenzity + aktualni hodnoty
+    printData%(1);
+    
+    return 1
+    
+end
+
+func yOptim%()
+
+    'uprava osy y
+    docase
+    case dataType% = 0 then  'APB
+        View(dataList%[1]).yrange(-2, 1.2*View(dataList%[1]).ChanMeasure(1, 8, 0.0+offset, 0.1+offset), 1.2*View(dataList%[1]).ChanMeasure(1, 7, 0.0+offset, 0.1+offset));
+    case dataType% = 1 then  'ADM
+        View(dataList%[1]).yrange(-2, 1.2*View(dataList%[1]).ChanMeasure(2, 8, 0.0+offset, 0.1+offset), 1.2*View(dataList%[1]).ChanMeasure(2, 7, 0.0+offset, 0.1+offset));
+    endcase
+
+    return 1
+
+end
+
+func nextFrame%()
+
+    if dataFlag% = 1 then
+    
+        ToolbarEnable(2, 1);    'zapne predchozi frame
+        ToolbarEnable(3, 0);    'vypne posun na dalsi frame
+        if(backCounter% > 0) then
+            ToolbarEnable(3, 1);    'zapne posun na dalsi frame
+            backCounter% -=1;
+        endif
+    endif
+
+    'zavrit okna
+    closeWindows%(0);
+    numberFrame% := View(dataList%[1]).Frame();
+    stateFrame% := View(dataList%[1]).FrameState(-2);   '-2 -> aktualni frame
+    if(stateFrame% = 1) then
+        stateFrame% := 2;
+    else
+        stateFrame% := 1;
+    endif
+
+    if changeFlag% = 1 then
+        'zapsani hodnot z predchoziho framu do pole data[][]
+        data[numberFrame%+1][0] := numberFrame%;
+        data[numberFrame%+1][1] := stateFrame%;
+        data[numberFrame%+1][2] := ApxBl;
+        data[numberFrame%+1][3] := ApxT1x;
+        data[numberFrame%+1][4] := ApxT1y;
+        data[numberFrame%+1][5] := ApxT2x;
+        data[numberFrame%+1][6] := ApxT2y;
+        data[numberFrame%+1][7] := ApxT3x;
+        data[numberFrame%+1][8] := ApxT3y;
+        data[numberFrame%+1][9] := p2p;
+        data[numberFrame%+1][10] := flagDivnosti%;
+        'znovunastaveni flagu na "normalni MEP"
+        if flagDivnosti% = 0 then
+            flagDivnosti% := 1;
+            ToolbarEnable(7, 1);    'zapne "zadny MEP"
+        endif
+        'vynulovani hodnot
+        ApxBl := 0; ApxT1x := 0; ApxT1y := 0; ApxT2x := 0; ApxT2y := 0; ApxT3x := 0; ApxT3y := 0; p2p := 0;
+        'vynulovani indikatoru zmeny hodnoty
+        changeFlag% := 0;
+    endif
+    
+    if(numberFrame% < 30) then
+        'posun na dalsi frame
+        View(dataList%[1]).Frame(numberFrame% + 1);
+        yOptim%();
+        'vypise dosud otagovane intenzity + aktualni hodnoty
+        printData%(1);
+        return 1
+    else
+        endFrame%();
+    endif
+    
+end
+
+func backFrame%()
+
+    backCounter% += 1;
+    ToolbarEnable(5, 1);
+
+    numberFrame% := view(dataList%[1]).Frame();
+    view(dataList%[1]).Frame(numberFrame%-1);
+
+    if(numberFrame% <= 2) then
+        ToolbarEnable(2, 0);    'vypne predchozi frame
+        ToolbarEnable(3, 1);    'zapne dalsi frame
+    endif
+
+    'uprava osy y
+    yOptim%();
+
+    return 1
+
+end
+
+func makeAverage%(state%)
+
+    'seznamy otevrenych oken dle jejich typu
+    ViewList(dataList%[], 1);
+    viewList(textList%[], 2);
+    ViewList(memoList%[], 16);
+
+    view(dataList%[1]);
+    'view(v11%).Frame(1);
+    frameLength := MaxTime();     
+    if (frameLength = 1) then
+        offset := 0.5;
+    else
+        offset := 0;
+    endif
+
+    PrintLog(offset);
+    setaverage(dataType%+1, 0.1, offset);
+    'formatovani okna dle svalu APB/ADM (stejne :-))
+    FileApplyResource("C:\\Users\\CEDACQ\\Desktop\\CED_scripts\\Signal\\Mereni hodnot\\SICI_avg_APB.sgrx");
+    'nastaveni pozice kurzoru
+    Cursor(1, 0.01+offset); Cursor(4, 0.02+offset); Cursor(5, 0.06+offset);
+    ProcessFrames(-1, 0, state%, 1, 1); '-1 = vsechny framy, 0 = jeden stav, state% = cislo stavu (1=dp, 2=sp) , 1 = vymazat pred zpracovanim, 1 = optimalizace os
+    WindowVisible(1);
+    window(0, 0, 50, 95);
+    'vypise dosud otagovane intenzity + aktualni hodnoty
+    printData%(1);
+    return 1
+
+end
+
+'zapis hodnot z kurzoru
+func writeValues%()
+
+    changeFlag% := 1;
+    'seznamy otevrenych oken dle jejich typu
+    ViewList(dataList%[], 1);
+    viewList(textList%[], 2);
+    ViewList(memoList%[], 16);
+
+    if dataFlag% = 0 then
+        ApxBl  := view(memoList%[1]).ChanMean(1, 0+offset, 0.01+offset);           'bl(mV)
+        ApxT1x := (view(memoList%[1]).cursor(2)*1000)-(10+(offset*1000));                 'T1x(ms)
+        ApxT1y := view(memoList%[1]).ChanValue(1, cursor(2));             'T1y(mV)
+        ApxT2x := (view(memoList%[1]).cursor(3)*1000)-(10+(offset*1000));                 'T2x(ms)
+        ApxT2y := view(memoList%[1]).ChanValue(1, cursor(3));             'T2y(mV)
+        ApxT3x := (view(memoList%[1]).cursor(6)*1000)-(10+(offset*1000));                 'T3x(mV)
+        ApxT3y := view(memoList%[1]).ChanValue(1, cursor(6));             'T3y(mV)
+    else
+        ToolbarEnable(3, 1);    'zapne posun na dalsi frame
+        ApxBl  := view(dataList%[1]).ChanMean(1, 0+offset, 0.01+offset);                'bl(mV)
+        ApxT1x := (view(dataList%[1]).cursor(2)*1000)-(10+(offset*1000));                 'T1x(ms)
+        ApxT1y := view(dataList%[1]).ChanValue(1, cursor(2));             'T1y(mV)
+        ApxT2x := (view(dataList%[1]).cursor(3)*1000)-(10+(offset*1000));                 'T2x(ms)
+        ApxT2y := view(dataList%[1]).ChanValue(1, cursor(3));             'T2y(mV)
+        ApxT3x := (view(dataList%[1]).cursor(6)*1000)-(10+(offset*1000));                 'T3x(mV)
+        ApxT3y := view(dataList%[1]).ChanValue(1, cursor(6));             'T3y(mV)
+    endif
+    p2p := abs(ApxT2y-ApxT3y);
+    'vypis hodnot do textoveho souboru
+    Print("%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n", ApxBl, ApxT1x, ApxT1y, ApxT2x, ApxT2y, ApxT3x, ApxT3y, p2p);
+
+    return 1
+end
+
+func spdpFrame%()
+    'ToolbarEnable(3, 0);
+    'pocitadlo otagovani prumernych MEPu - nejprve treba udelat sp, pak dp a pak lze jit po framech
+    spdpFlag% += 1;
+    
+    var pos%;
+    if (state% = 2) then
+        pos% := 0;
+    else
+        pos% := 1;
+    endif
+    'zapsani hodnot do pole data[][]
+    data[pos%][2] := ApxBl;
+    data[pos%][3] := ApxT1x;
+    data[pos%][4] := ApxT1y;
+    data[pos%][5] := ApxT2x;
+    data[pos%][6] := ApxT2y;
+    data[pos%][7] := ApxT3x;
+    data[pos%][8] := ApxT3y;
+    data[pos%][9] := p2p;
+    'vynulovani hodnot
+    ApxBl := 0; ApxT1x := 0; ApxT1y := 0; ApxT2x := 0; ApxT2y := 0; ApxT3x := 0; ApxT3y := 0; p2p := 0;
+    'prohozenbi state%
+    if (state% = 2) then
+        state% := 1;
+    else
+        state% := 2;
+    endif
+    'zavrit okna
+    closeWindows%(0);
+    'vypocet prumeru
+    makeAverage%(state%);
+
+    'odemknuti tlacitek
+    if spdpFlag% >= 2 then
+        ToolbarEnable(4, 1);    'per frame 4
+    endif
+
+    return 1
+end
+
+func printData%(whatPrint%) ' 0= data[][], 1= data[]+vriteValues()
+    'otevreni textoveho okna pro zapis dat
+    filenew(1, 1);
+    window(50, 0, 100, 95);
+    'vypis hlavicky textoveho souboru
+    docase
+        case dataType% = 0 then  'APB
+            WindowTitle$(name$ + "APB");
+        case dataType% = 1 then  'ADM
+            WindowTitle$(name$ + "ADM");
+    endcase
+    Print("Prvni dva radky jsou prumerne MEPy!!\n\n");
+    Print("frm\tsp\dp\tbl(mV)\tT1x(ms)\tT1y(mV)\tT2x(ms)\tT2y(mV)\tT3x(ms)\tT3y(mV)\tp2p(mV)\tX\t\n");
+    var m%;   'pocitadlo
+    'vypis hodnot
+    for m% := 0 to 31 do 
+           Print("%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%d\n", data[m%][0],data[m%][1],data[m%][2],data[m%][3],data[m%][4],data[m%][5],data[m%][6],data[m%][7],data[m%][8], data[m%][9],data[m%][10]);    
+        if m% = 1 then
+            Print("\n");
+        endif
+    next 
+    if(whatPrint% = 1) then
+    'vypis klasicke hlavicky textoveho souboru
+        Print("- - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+        Print("Aktualni hodnoty:\n\n");
+        Print("bl(mv)\tT1x(ms)\tT1y(mV)\tT2x(ms)\tT2y(mV)\tT3x(ms)\tT3y(mV)\tp2p(mV)\n");
+    endif
+end
+
+func bigDataPrint%()
+
+    var p%, q%; 'pocitadla
+
+    'vypis do jednoho radku
+    Print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n");
+    for p% := 0 to 1 do
+        for q% := 1 to 7 do
+            Print("%.3f\t", data[p%][q%]);
+        next
+    next
+
+end
+
+func closeWindows%(whatClose%)  '0 - memo+text; 1 - memo+text+data
+    
+    var j%;
+    'seznamy otevrenych oken dle jejich typu
+    ViewList(dataList%[], 1);
+    viewList(textList%[], 2);
+    ViewList(memoList%[], 16);
+    'zavreni oken s daty, memory views a textovymi soubory
+    for j%:= 1 to textList%[0] do  
+        view(textList%[j%]);
+        FileClose(0, -1);   'zavrit a neptat se na ulozeni
+    next;
+    for j%:= 1 to memoList%[0] do  
+        view(memoList%[j%]);
+        FileClose(0, -1);   'zavrit a neptat se na ulozeni
+    next;
+    if(whatClose% = 1) then
+        for j%:= 1 to dataList%[0] do  
+            view(dataList%[j%]);
+            FileClose(0, -1);   'zavrit a neptat se na ulozeni
+        next;
+    endif
+end
+
+'ukonceni mereni
+func endFrame%()
+    sound(2000, 0.2);
+    closeWindows%(1);   '1 = zavrit vsechna okna bez ulozeni
+    'printData%(0);      '0 = vytiskne pouze tabulku data[][]
+    'otevreni textoveho okna pro zapis dat
+    filenew(1, 1);
+    window(50, 0, 100, 95);
+    'vypis hlavicky textoveho souboru
+    docase
+        case dataType% = 0 then  'APB
+            WindowTitle$(name$ + "APB");
+        case dataType% = 1 then  'ADM
+            WindowTitle$(name$ + "ADM");
+    endcase
+    var m%, n%;   'pocitadlo
+    var latenceSPDP[30][2];
+    Print("Prvni dva radky jsou prumerne MEPy!!\n\n");
+    Print("frm\tsp\dp\tbl(mV)\tT1x(ms)\tT1y(mV)\tT2x(ms)\tT2y(mV)\tT3x(ms)\tT3y(mV)\tp2p(mV)\tX\t\n");
+    for m% := 0 to 1 do
+        Print("%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%d\n", data[m%][0],data[m%][1],data[m%][2],data[m%][3],data[m%][4],data[m%][5],data[m%][6],data[m%][7],data[m%][8],data[m%][9],data[m%][10]);
+    next
+    Print("\n");
+    'vypis hodnot
+    var nSP%, nDP%;
+    var sumaSP, sumaDP;
+    var prumerSP, prumerDP;
+    for n% := 1 to 2 do
+        for m% := 2 to 31 do
+            if (data[m%][1] = n%) then
+                'latenceSPDP[m%-2][n%-1] := data[m%][3];
+                Print("%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\t%d\n", data[m%][0],data[m%][1],data[m%][2],data[m%][3],data[m%][4],data[m%][5],data[m%][6],data[m%][7],data[m%][8],data[m%][9],data[m%][10]);
+                if((n% = 1) and (data[m%][10] = 1))then
+                    nSP% += 1;
+                    sumaSP := sumaSP + data[m%][3];
+                endif
+                if((n% = 2) and (data[m%][10] = 1))then
+                    nDP% += 1;
+                    sumaDP := sumaDP + data[m%][3];
+                endif
+            endif
+        next 
+    next
+    Print("\n");
+
+    prumerSP := sumaSP/nSP%;
+    prumerDP := sumaDP/nDP%;
+
+    Print("Suma sp: %.3f ms, n: %d, prumer sp: %.3f ms \n", sumaSP, nSP%, prumerSP);
+    Print("Suma dp: %.3f ms, n: %d, prumer dp: %.3f ms \n", sumaDP, nDP%, prumerDP);
+    
+end
